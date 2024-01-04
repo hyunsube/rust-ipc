@@ -1,0 +1,1 @@
+How to install and build rust project: https://velog.io/@markyang92/rust
