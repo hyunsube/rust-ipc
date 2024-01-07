@@ -9,3 +9,12 @@ edition = "2021"
 zbus = "3.14.1"
 async-std = {version = "1.12.0", features = ["attributes"]}
 futures-util = "0.3"
+event-listener = "4.0.2"
+
+[[bin]]
+name = "server"
+path = "src/server.rs"
+
+[[bin]]
+name = "client"
+path = "src/client.rs"
