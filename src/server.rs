@@ -1,26 +1,25 @@
 use std::{error::Error, future::pending};
 use zbus::{ConnectionBuilder, dbus_interface};
 
-struct Greeter {
-    count: u64
+struct DataStruct {
 }
 
-#[dbus_interface(name = "org.zbus.MyGreeter1")]
-impl Greeter {
+#[dbus_interface(name = "org.zbus.DataIPC")]
+impl DataStruct {
     // Can be `async` as well.
-    fn say_hello(&mut self, name: &str) -> String {
-        self.count += 1;
-        format!("Hello {}! I have been called {} times.", name, self.count)
+    fn send_string(&mut self, data: &str) -> String {
+        println!("String data has been received!. {data}");
+        format!("Receive string: {}", data)
     }
 }
 
 // Although we use `async-std` here, you can use any async runtime of choice.
 #[async_std::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let greeter = Greeter { count: 0 };
+    let data_struct = DataStruct {};
     let _conn = ConnectionBuilder::session()?
-        .name("org.zbus.MyGreeter")?
-        .serve_at("/org/zbus/MyGreeter", greeter)?
+        .name("org.zbus.DataIPC")?
+        .serve_at("/org/zbus/DataIPC", data_struct)?
         .build()
         .await?;
 
