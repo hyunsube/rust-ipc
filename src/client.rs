@@ -1,5 +1,13 @@
 use zbus::{Connection, Result, dbus_proxy};
 use std::io;
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Data {
+    name: String,
+    value: i32,
+}
+
 #[dbus_proxy(
     interface = "org.zbus.DataIPC",
     default_service = "org.zbus.DataIPC",
@@ -7,11 +15,13 @@ use std::io;
 )]
 trait DataStruct {
     async fn send_string(&self, name: &str) -> Result<String>;
+    async fn send_data(&self, data: &str) -> Result<String>;
 }
 
 fn print_description() {
     println!("-----------------------------");
     println!("s: send string");
+    println!("d: send json data");
     println!("q: quit");
 }
 
@@ -41,6 +51,14 @@ async fn main() -> Result<()> {
                     .expect("Fail to read input");
 
                 let reply = proxy.send_string(&send_input).await?;
+                println!("reply: {reply}");
+            }
+            "d" => {
+                let _data = Data {name: "Hyunsub".to_string(), value: 29};
+                let serialized = serde_json::to_string(&_data).unwrap();
+                println!("Send dault data struct with json string: {serialized}");
+
+                let reply = proxy.send_data(&serialized).await?;
                 println!("reply: {reply}");
             }
             "q" => {
