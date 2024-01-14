@@ -5,9 +5,9 @@ use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize, Debug)]
 struct Data {
     name: String,
-    value: i32,
+    age: i32,
+    birthday: i32,
 }
-
 #[dbus_proxy(
     interface = "org.zbus.DataIPC",
     default_service = "org.zbus.DataIPC",
@@ -21,7 +21,7 @@ trait DataStruct {
 fn print_description() {
     println!("-----------------------------");
     println!("s: send string");
-    println!("d: send json data");
+    println!("d: send json string data");
     println!("q: quit");
 }
 
@@ -54,7 +54,7 @@ async fn main() -> Result<()> {
                 println!("reply: {reply}");
             }
             "d" => {
-                let _data = Data {name: "Hyunsub".to_string(), value: 29};
+                let _data = Data {name: "Hyunsub".to_string(), age: 29, birthday: 19960606};
                 let serialized = serde_json::to_string(&_data).unwrap();
                 println!("Send dault data struct with json string: {serialized}");
 

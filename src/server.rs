@@ -2,10 +2,11 @@ use std::{error::Error, future::pending};
 use zbus::{ConnectionBuilder, dbus_interface};
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 struct Data {
     name: String,
-    value: i32,
+    age: i32,
+    birthday: i32,
 }
 
 struct DataStruct {
